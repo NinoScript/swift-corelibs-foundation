@@ -144,12 +144,12 @@ open class NSDictionary : NSObject, NSCopying, NSMutableCopying, NSSecureCoding,
     }
     
     open func encode(with aCoder: NSCoder) {
-        if let keyedArchiver = aCoder as? NSKeyedArchiver {
-            keyedArchiver._encodeArrayOfObjects(self.allKeys._nsObject, forKey:"NS.keys")
-            keyedArchiver._encodeArrayOfObjects(self.allValues._nsObject, forKey:"NS.objects")
-        } else {
-            NSUnimplemented()
+        guard aCoder.allowsKeyedCoding else {
+            NSUnsupported()
         }
+        
+        keyedArchiver._encodeArrayOfObjects(self.allKeys._nsObject, forKey:"NS.keys")
+        keyedArchiver._encodeArrayOfObjects(self.allValues._nsObject, forKey:"NS.objects")
     }
     
     public static var supportsSecureCoding: Bool {
